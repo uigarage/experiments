@@ -1,0 +1,64 @@
+<ion-header>
+
+  <ion-navbar color="fusionred">
+    <ion-title >Calculate Your EMI</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content >
+    <ion-list>
+      <ion-item>
+      </ion-item>  
+      <ion-item>
+        <ion-label stacked>Principal</ion-label>
+        <ion-input 
+          required
+          [(ngModel)]="principal"
+          (ngModelChange)="onPrincipalChange()"
+          name="princiapl"
+          type="number"></ion-input>
+      </ion-item>
+    
+      <ion-item>
+        <ion-label stacked>Interest</ion-label>
+        <ion-input type="number"></ion-input>
+      </ion-item>
+
+      <ion-item>
+          <ion-label stacked>Tenure in {{ monthOrYear }}</ion-label>
+          <ion-input type="number"></ion-input>
+          <ion-toggle color="fusionred" [(ngModel)]="selectTenure" (ngModelChange)="onSelectTenure($event)" checked="true"></ion-toggle>
+      </ion-item>
+      <ion-item>
+      </ion-item>
+      
+  </ion-list>
+
+  <ion-grid>
+      <ion-row>
+        <ion-col col-4>
+          <button ion-button icon-left full color="fusionred">
+            <ion-icon name="md-close"></ion-icon>
+            Reset
+          </button>
+        </ion-col>
+
+        <ion-col col-4>
+            <button ion-button icon-left full color="fusionred">
+                <ion-icon name="md-calculator"></ion-icon>
+                Calculate
+              </button>
+          </ion-col>
+
+          <ion-col col-4>
+              <button ion-button icon-left full color="frenchsky">
+                  <ion-icon name="md-filing"></ion-icon>
+                  History
+                </button>
+            </ion-col>
+      </ion-row>
+      
+    </ion-grid>
+</ion-content>

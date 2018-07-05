@@ -329,3 +329,15 @@ convert_number(number)
   }
 
 }
+
+==========
+Formulae
+==========
+
+      var emi, 
+      p =  400000, //this.principal,
+      r =  8.75/12/100, // this.interest,
+      n = 36; //this.tenure;  //  in months, if it's in years, then convert it to months.
+
+      emi = p * r * Math.pow((1 + r),n)/( Math.pow((1 + r),n) - 1);
+      console.log(emi);

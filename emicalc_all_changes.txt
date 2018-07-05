@@ -1,0 +1,331 @@
+Home.html
+===================
+<ion-header >
+  <ion-navbar color="saturatedsky">
+    <ion-title>Login</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content >
+
+   
+
+        <ion-grid>
+            <ion-row>
+              <ion-col class="test" col-4>
+                <a class="" (click)="openPage('emi')" ion-button full color="frenchsky" >EMI Calc</a>
+              </ion-col>
+              <ion-col col-4>
+                  <a class="" ion-button full color="frenchsky" >EMI Calc</a>
+              </ion-col>
+              <ion-col col-4>
+                  <a class="" ion-button full color="frenchsky" >EMI Calc</a>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col class="test" col-4>
+                <a class="" ion-button full color="frenchsky" >EMI Calc</a>
+              </ion-col>
+              <ion-col col-4>
+                  <a class="" ion-button full color="frenchsky" >EMI Calc</a>
+              </ion-col>
+              <ion-col col-4>
+                  <a class="" ion-button full color="frenchsky" >EMI Calc</a>
+              </ion-col>
+            </ion-row>
+    
+          </ion-grid>    
+ 
+    <!-- <ion-list>
+
+        <ion-item>
+          <ion-label floating>Username</ion-label>
+          <ion-input type="text" #username value=""></ion-input>
+        </ion-item>
+      
+        <ion-item>
+          <ion-label floating>Password</ion-label>
+          <ion-input type="password" #password></ion-input>
+        </ion-item>
+      
+      </ion-list>
+
+      <div padding>
+        <button ion-button (click)="signIn()">Sign In</button>
+      </div> -->
+</ion-content>
+
+home.ts
+=======
+import { EmiPage } from './../emi/emi';
+import { Component, ViewChild } from '@angular/core';
+import { NavController, AlertController } from 'ionic-angular';
+
+@Component({
+  selector: 'page-home',
+  templateUrl: 'home.html'
+})
+export class HomePage {
+
+  // @ViewChild('username') username;
+  // @ViewChild('password') password;
+
+  constructor(public navCtrl: NavController, public alertCtrl: AlertController) {
+
+  }
+
+  openPage(page: string) {
+    console.log('Home > openPage > ', page);
+
+    if(page === 'emi') 
+      this.navCtrl.push(EmiPage)
+    
+  }
+
+  signIn() {
+    // console.log(this.username.value + ', ' + this.password.value);
+
+  }
+
+}
+
+
+variables.scss
+===============
+$colors: (
+  primary:    #488aff,
+  secondary:  #32db64,
+  danger:     #f53d3d,
+  light:      #f4f4f4,
+  dark:       #222,
+
+  emrald:   #34e7e4,
+  reptilegreen: #26de81,
+  bluehorizon: #4b6584,
+  lighterpurple: #a55eea,
+  algalfuel: #20bf6b,
+  saturatedsky: #5352ed,
+  frenchsky: #70a1ff,
+  periwinkle: #9c88ff,
+  downloadprogress: #4cd137,
+  fusionred: #fc5c65
+);
+
+
+
+emi.html
+==========
+<!--
+  Generated template for the EmiPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+
+#ffcccc
+#ffcccc
+B8e994
+From French pallete
+#ff7f50
+From chinese
+The above 2 combo epd iruku
+
+-->
+<ion-header>
+
+  <ion-navbar color="fusionred">
+    <ion-title >Calculate Your EMI</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content >
+    <ion-list>
+      <ion-item>
+      </ion-item>  
+      <ion-item>
+        <ion-label stacked>Principal</ion-label>
+        <ion-input 
+          required
+          [(ngModel)]="principal"
+          (ngModelChange)="onPrincipalChange()"
+          name="princiapl"
+          type="number"></ion-input>
+      </ion-item>
+    
+      <ion-item>
+        <ion-label stacked>Interest</ion-label>
+        <ion-input type="number"></ion-input>
+      </ion-item>
+
+      <ion-item>
+          <ion-label stacked>Tenure in {{ monthOrYear }}</ion-label>
+          <ion-input type="number"></ion-input>
+          <ion-toggle color="fusionred" [(ngModel)]="selectTenure" (ngModelChange)="onSelectTenure($event)" checked="true"></ion-toggle>
+      </ion-item>
+      <ion-item>
+      </ion-item>
+      
+  </ion-list>
+
+  <ion-grid>
+      <ion-row>
+        <ion-col col-4>
+          <button ion-button icon-left full color="fusionred">
+            <ion-icon name="md-close"></ion-icon>
+            Reset
+          </button>
+        </ion-col>
+
+        <ion-col col-4>
+            <button ion-button icon-left full color="fusionred">
+                <ion-icon name="md-calculator"></ion-icon>
+                Calculate
+              </button>
+          </ion-col>
+
+          <ion-col col-4>
+              <button ion-button icon-left full color="frenchsky">
+                  <ion-icon name="md-filing"></ion-icon>
+                  History
+                </button>
+            </ion-col>
+      </ion-row>
+      
+    </ion-grid>
+</ion-content>
+
+emi.ts
+=======
+import { Component } from '@angular/core';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
+
+/**
+ * Generated class for the EmiPage page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
+
+@IonicPage()
+@Component({
+  selector: 'page-emi',
+  templateUrl: 'emi.html',
+})
+export class EmiPage {
+
+  selectTenure: any;
+  monthOrYear: string;
+  principal: number;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams) {
+    this.monthOrYear = 'Year(s)'
+    this.selectTenure = true;
+  }
+
+  onSelectTenure($event) {
+    console.log('EMI > onSelectTenure');
+    console.log(this.selectTenure);
+    console.log($event);
+    this.monthOrYear = 'Month(s)';
+
+    if(this.selectTenure)
+      this.monthOrYear  = 'Year(s)';
+  }
+
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad EmiPage');
+  }
+  
+  onPrincipalChange() {
+    console.log('EMI > onPrincipalChange');
+    console.log(this.principal);
+  }
+
+  number2text(value) {
+    var fraction = Math.round(this.frac(value)*100);
+    var f_text  = "";
+
+    if(fraction > 0) {
+        f_text = "And "+this.convert_number(fraction)+" Paise";
+    }
+
+    return this.convert_number(value)+" Rupee "+f_text+" Only";
+}
+
+frac(f) {
+    return f % 1;
+}
+
+convert_number(number)
+{
+    if ((number < 0) || (number > 999999999)) 
+    { 
+        return "Number Out of Range!";
+    }
+    var Gn = Math.floor(number / 10000000);  /* Crore */ 
+    number -= Gn * 10000000; 
+    var kn = Math.floor(number / 100000);     /* lakhs */ 
+    number -= kn * 100000; 
+    var Hn = Math.floor(number / 1000);      /* thousand */ 
+    number -= Hn * 1000; 
+    var Dn = Math.floor(number / 100);       /* Tens (deca) */ 
+    number = number % 100;               /* Ones */ 
+    var tn= Math.floor(number / 10); 
+    var one=Math.floor(number % 10); 
+    var res = ""; 
+
+    if (Gn>0) 
+    { 
+        res += (this.convert_number(Gn) + " Crore"); 
+    } 
+    if (kn>0) 
+    { 
+            res += (((res=="") ? "" : " ") + 
+            this.convert_number(kn) + " Lakh"); 
+    } 
+    if (Hn>0) 
+    { 
+        res += (((res=="") ? "" : " ") +
+            this.convert_number(Hn) + " Thousand"); 
+    } 
+
+    if (Dn) 
+    { 
+        res += (((res=="") ? "" : " ") + 
+            this.convert_number(Dn) + " Hundred"); 
+    } 
+
+
+    var ones = Array("", "One", "Two", "Three", "Four", "Five", "Six","Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen","Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen","Nineteen"); 
+    var tens = Array("", "", "Twenty", "Thirty", "Fourty", "Fifty", "Sixty","Seventy", "Eighty", "Ninety"); 
+
+    if (tn>0 || one>0) 
+    { 
+        if (!(res=="")) 
+        { 
+            res += " And "; 
+        } 
+        if (tn < 2) 
+        { 
+            res += ones[tn * 10 + one]; 
+        } 
+        else 
+        { 
+
+            res += tens[tn];
+            if (one>0) 
+            { 
+                res += ("-" + ones[one]); 
+            } 
+        } 
+    }
+
+    if (res=="")
+    { 
+        res = "zero"; 
+    } 
+    return res;
+  }
+
+}

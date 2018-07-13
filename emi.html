@@ -1,0 +1,105 @@
+<!--
+  Generated template for the EmiPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+
+#ffcccc
+#ffcccc
+B8e994
+From French pallete
+#ff7f50
+From chinese
+The above 2 combo epd iruku
+
+-->
+<ion-header>
+
+  <ion-navbar color="fusionred">
+    <ion-title></ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content >
+  <form id="emiCalculateForm"
+    #emiCalculateForm="ngForm"
+    (ngSubmit)="calculateEMI(emiCalculateForm)">
+
+    <ion-list>
+      <ion-item>
+        {{principalAmountInWords}}
+      </ion-item>  
+      <ion-item>
+        <ion-label stacked>Principal</ion-label>
+        <ion-input 
+          required
+          [(ngModel)]="principal"
+          (ngModelChange)="onPrincipalChange()"
+          name="principal"
+          type="number"></ion-input>
+      </ion-item>
+    
+      <ion-item>
+        <ion-label stacked>Interest</ion-label>
+        <ion-input 
+          required 
+          [(ngModel)]="interest"
+          name="interest"
+          type="number"></ion-input>
+      </ion-item>
+
+      <ion-item>
+          <ion-label stacked>Tenure in {{ monthOrYear }}</ion-label>
+          <ion-input 
+            required 
+            [(ngModel)]="tenure"
+            name="tenure"
+            type="number"></ion-input>
+          <ion-toggle 
+            color="fusionred" 
+            [(ngModel)]="selectTenure" 
+            (ngModelChange)="onSelectTenure($event)" 
+            name="selectTenure"
+            checked="true"></ion-toggle>
+      </ion-item>
+      <ion-item>
+      </ion-item>
+      
+  </ion-list>
+
+  <ion-grid>
+      <ion-row>
+        <ion-col col-4>
+          <button ion-button icon-left full color="fusionred">
+            <ion-icon name="md-close"></ion-icon>
+            Reset
+          </button>
+        </ion-col>
+
+        <ion-col col-4>
+          <button ion-button icon-left full color="fusionred" (click)="calculateEMI()">
+              <ion-icon name="md-calculator"></ion-icon>
+              Calculate
+            </button>
+        </ion-col>
+
+        <ion-col col-4>
+            <button ion-button icon-left full color="fusionred" type="submit">
+                <ion-icon name="md-calculator"></ion-icon>
+                Calculate
+              </button>
+          </ion-col>
+
+          <ion-col col-4>
+              <button ion-button icon-left full color="fusionred">
+                  <ion-icon name="md-filing"></ion-icon>
+                  History
+                </button>
+            </ion-col>
+      </ion-row>
+      
+    </ion-grid>
+    </form>
+</ion-content>

@@ -1,3 +1,4 @@
+import { HistoryPage } from './../history/history';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
@@ -16,11 +17,14 @@ interface EmiDO {
     tenure: number
 }
 
+const EMIHISTORY = 'emihistory';
+
 @IonicPage()
 @Component({
   selector: 'page-emi',
   templateUrl: 'emi.html',
 })
+
 export class EmiPage {
 
   selectTenure: any;
@@ -29,9 +33,9 @@ export class EmiPage {
   principalAmountInWords: string;
   interest: number;
   tenure: number;
-
   emiObj: EmiDO;
-
+  storedEmiList: any;   //Array<object>;
+  
 
   constructor(public navCtrl: NavController, 
             public navParams: NavParams, 
@@ -39,20 +43,57 @@ export class EmiPage {
             public alertCtrl: AlertController
         ) {
     console.log('EMI > constructor');
+    console.log(navParams);
+    console.log( navParams.get('principal'));
     this.monthOrYear = 'Year(s)';
     this.selectTenure = true;
 
-    // set a key/value
-    this.storage.set('sample_json', JSON.stringify( { prop: 'value1', prop2: 'value2'} ));
-    this.storage.set('sample_json', JSON.stringify( [ { prop: 'value1', prop2: 'value2'}, { prop: 'value1', prop2: 'value2'} , { prop: 'value1', prop2: 'value2'}   ] ));
+    if(navParams.get('principal')) {
+        console.log('calculate EMI');
+        this.principal = navParams.get('principal');
+        this.interest = navParams.get('interest');
+        this.tenure = navParams.get('tenure');
+        this.onPrincipalChange()
+    }
 
-   
+    
+
+    // set a key/value
+    // this.storage.set('sample_json', JSON.stringify( { prop: 'value1', prop2: 'value2'} ));
+    // this.storage.set('sample_json', JSON.stringify( [ { prop: 'value1', prop2: 'value2'}, { prop: 'value1', prop2: 'value2'} , { prop: 'value1', prop2: 'value2'}   ] ));
+    // this.storage.get('sample_json').then((val) => {
+    //     console.log(JSON.parse(val));
+    // });
+
+
+    // var emiObj = {
+    //     tenureType: 'Month(s)',
+    //     principal: 400000,
+    //     interest: 8.75,
+    //     tenure: 36
+    // }
+
+    // var emiToStore = [];
+
+    // for(var i = 0; i < 5; i ++) {
+    //     emiToStore.push( {
+    //         tenureType: 'Month(s)',
+    //         principal: 400000 + i,
+    //         interest: 8.75 + i ,
+    //         tenure: 36 + i
+    //     });
+    // }
+
+    // this.storage.set(EMIHISTORY, JSON.stringify(emiToStore));
+
+    // this.storedEmiList = this.storage.get(EMIHISTORY)
+    // .then((val) => {
+    //     return JSON.parse(val);
+    // });
   }
 
   onSelectTenure($event) {
     console.log('EMI > onSelectTenure');
-    console.log(this.selectTenure);
-    console.log($event);
     this.monthOrYear = 'Month(s)';
 
     if(this.selectTenure)
@@ -67,36 +108,50 @@ export class EmiPage {
     console.log('EMI > onPrincipalChange');
     console.log(this.principal);
     var principalAmountInWords = this.number2text(this.principal);
-    console.log(principalAmountInWords);
     this.principalAmountInWords = principalAmountInWords;
   }
 
 
   calculateEMI(emiForm) {
     console.log('EMI > calculateEMI');
-    let errorMessage: any;
+    var errorMessage = [];
 
-    console.log(emiForm);   
-
-    //  Do a basic form validation
+    // Doing some basic form validation
     if( !emiForm.form.valid ) {
-        console.log('Form is not valid');
         if( !emiForm.form.controls.principal.valid ) {
-            if( emiForm.form.controls.principal.value = '' ) {
+            if( !emiForm.form.controls.principal.value || emiForm.form.controls.principal.value == '' ) {
                 errorMessage.push('Principal amount is empty');
             }
-            console.log('Principal amount is not valid');
+        }
+
+        if( !emiForm.form.controls.interest.valid ) {
+            if( !emiForm.form.controls.interest.value || emiForm.form.controls.interest.value == '' ) {
+                errorMessage.push('Interest is empty');
+            }
+        }
+
+        if( !emiForm.form.controls.tenure.valid ) {
+            if( !emiForm.form.controls.tenure.value || emiForm.form.tenure.interest.value == '' ) {
+                errorMessage.push('Tenure is empty');
+            }
         }
     }
 
-    console.log(errorMessage);
+    if(errorMessage.length) {
+        var errorMessageToDisplay = '';
+        for(var i = 0, len = errorMessage.length; i < len; i++) {
+            errorMessageToDisplay +=  errorMessage[i] + '<br/>';
+        }
 
-    let alert = this.alertCtrl.create({
-        title: 'Low battery',
-        subTitle: '10% of battery remaining',
-        buttons: ['Dismiss']
-    });
-    alert.present();
+        let alert = this.alertCtrl.create({
+            title: 'Error!',
+            subTitle: errorMessageToDisplay,
+            buttons: ['Dismiss']
+        });
+        alert.present();
+
+        return;
+    }
 
     // Or to get a key/value pair
     // this.storage.get('sample_json').then((val) => {
@@ -125,16 +180,63 @@ export class EmiPage {
     console.log(this.emiObj);
 
     var emi, 
-    p =  400000, //this.principal,
-    r =  8.75/12/100, // this.interest,
-    n = 36; //this.tenure;  //  in months, if it's in years, then convert it to months.
+    // p =  400000, //this.principal,
+    // r =  8.75/12/100, // this.interest,
+    // n = 36; //this.tenure;  //  in months, if it's in years, then convert it to months.
+
+    p =  this.principal,
+    r =  this.interest /12/100,
+    n =  (this.monthOrYear == 'Year(s)') ? (this.tenure * 12) : this.tenure ;  
+    //  in months, if it's in years, then convert it to months.
 
     emi = p * r * Math.pow((1 + r),n)/( Math.pow((1 + r),n) - 1);
     console.log(emi);
-
+    
+    this.storeEMIValues(this.emiObj);
   }
 
+  storeEMIValues(emi: Object) {
+    console.log('EMI > storeEMIValues');
+    var storedEmiList = [];
+    this.storage.get(EMIHISTORY).then((val) => {
+        if(val) {
+            console.log('Inside GET Storage');
+            storedEmiList = JSON.parse(val);
 
+            console.log(this.isEMIValuesAlreadyExist(storedEmiList, emi));
+            if(!this.isEMIValuesAlreadyExist(storedEmiList, emi)) {
+                storedEmiList.push(emi);
+                this.storage.set(EMIHISTORY, JSON.stringify( storedEmiList  ));
+            }
+
+            console.log('Stored EMI List');
+            console.log(storedEmiList);            
+        }
+    });
+  }
+
+  isEMIValuesAlreadyExist(storedList, emi) {
+    var temp;
+    for( var i = 0, len = storedList.length; i < len; i++ ) {
+        temp = storedList[i];
+        if(temp.principal === emi.principal 
+            && temp.interest === emi.interest
+            && temp.tenure === emi.tenure
+            && temp.tenureType === emi.tenureType ) {
+                return true;
+        }
+    }
+    return false;
+  }
+
+  openPage(page: string) {
+    console.log('EMI > openPage > ', page);
+
+    if(page === 'history') 
+      this.navCtrl.push(HistoryPage); 
+  }
+
+  //    Common utils function
   number2text(value) {
     var fraction = Math.round(this.frac(value)*100);
     var f_text  = "";

@@ -1,15 +1,35 @@
-<ion-header>
+<!--
+  Generated template for the EmiPage page.
 
-  <ion-navbar color="fusionred">
-    <ion-title >Calculate Your EMI</ion-title>
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+
+#ffcccc
+#ffcccc
+B8e994
+From French pallete
+#ff7f50
+From chinese
+The above 2 combo epd iruku
+
+-->
+<ion-header class="myapp-header" id="calculateEmiHeader"  no-border>
+  <ion-navbar color="myapp-grey">
+    <ion-title>EMI Calculator</ion-title>
   </ion-navbar>
-
 </ion-header>
 
+<ion-content class="myapp">
 
-<ion-content >
+  <form 
+    id="emiCalculateForm"
+    #emiCalculateForm="ngForm"
+    (ngSubmit)="calculateEMI(emiCalculateForm)"
+    name="emiCalculateForm">
+
     <ion-list>
-      <ion-item>
+      <ion-item no-border>
+        {{principalAmountInWords}}
       </ion-item>  
       <ion-item>
         <ion-label stacked>Principal</ion-label>
@@ -17,19 +37,32 @@
           required
           [(ngModel)]="principal"
           (ngModelChange)="onPrincipalChange()"
-          name="princiapl"
+          name="principal"
           type="number"></ion-input>
       </ion-item>
     
       <ion-item>
         <ion-label stacked>Interest</ion-label>
-        <ion-input type="number"></ion-input>
+        <ion-input 
+          required 
+          [(ngModel)]="interest"
+          name="interest"
+          type="number"></ion-input>
       </ion-item>
 
       <ion-item>
           <ion-label stacked>Tenure in {{ monthOrYear }}</ion-label>
-          <ion-input type="number"></ion-input>
-          <ion-toggle color="fusionred" [(ngModel)]="selectTenure" (ngModelChange)="onSelectTenure($event)" checked="true"></ion-toggle>
+          <ion-input 
+            required 
+            [(ngModel)]="tenure"
+            name="tenure"
+            type="number"></ion-input>
+          <ion-toggle 
+            color="myapp-blue" 
+            [(ngModel)]="selectTenure" 
+            (ngModelChange)="onSelectTenure($event)" 
+            name="selectTenure"
+            checked="true"></ion-toggle>
       </ion-item>
       <ion-item>
       </ion-item>
@@ -39,26 +72,52 @@
   <ion-grid>
       <ion-row>
         <ion-col col-4>
-          <button ion-button icon-left full color="fusionred">
-            <ion-icon name="md-close"></ion-icon>
+          <button class="myapp-btn" ion-button icon-left full color="myapp-blue">
+            <!-- <ion-icon name="md-close"></ion-icon> -->
             Reset
           </button>
         </ion-col>
 
-        <ion-col col-4>
-            <button ion-button icon-left full color="fusionred">
-                <ion-icon name="md-calculator"></ion-icon>
-                Calculate
-              </button>
-          </ion-col>
+        <!-- <ion-col col-4>
+          <button ion-button icon-left full color="fusionred" (click)="calculateEMI()">
+              <ion-icon name="md-calculator"></ion-icon>
+              Calculate
+            </button>
+        </ion-col> -->
 
-          <ion-col col-4>
-              <button ion-button icon-left full color="frenchsky">
+        <ion-col col-4>
+          <button class="myapp-btn" ion-button icon-left full color="myapp-blue" type="submit">
+              <!-- <ion-icon name="md-calculator"></ion-icon> -->
+              Calculate
+            </button>
+        </ion-col>
+
+        <ion-col col-4>
+          <button class="myapp-btn" ion-button icon-left full color="myapp-blue" type="button" disabled>
+              <!-- <ion-icon name="beer"></ion-icon> -->
+              Details
+            </button>
+        </ion-col>
+
+          <!-- <ion-col col-4>
+              <button class="myapp-btn" ion-button icon-left full color="myapp-blue"  
+                (click)="openPage('history')"
+                type="button">
                   <ion-icon name="md-filing"></ion-icon>
                   History
                 </button>
-            </ion-col>
+            </ion-col> -->
       </ion-row>
       
     </ion-grid>
+    </form>
+
+  <ion-card text-center>
+    <ion-card-header>
+      Header
+    </ion-card-header>
+    <ion-card-content>
+      The British use the term "header", but the American term "head-shot" the English simply refuse to adopt.
+    </ion-card-content>
+  </ion-card>
 </ion-content>

@@ -1,0 +1,80 @@
+<ion-header  no-border>
+  <ion-navbar color="myapp-blue">
+    <ion-title></ion-title>
+
+    <ion-buttons end>
+        <button ion-button icon-only (click)="openModal()">
+            <ion-icon name="settings"></ion-icon>
+        </button>
+      </ion-buttons>
+
+  </ion-navbar>    
+
+</ion-header> 
+
+<ion-content class="myapp">
+  <ion-grid>
+    <ion-row>
+      <ion-col col-12>
+          <h4 class="heading" ion-text color="dark">FINANCIAL TOOL CALCULATOR TOOL</h4>
+          <p class="heading-para">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus bibendum</p>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>  
+      <ion-col col-3>
+        <a class="" (click)="openPage('emi')" ion-button color="dark" outline >Calc</a>
+      </ion-col>
+      <ion-col col-3>
+          <a class="" ion-button  color="dark" outline >ROI %</a>
+      </ion-col>
+      <ion-col col-3>
+          <a class="" ion-button  color="dark" outline >Tenure</a>
+      </ion-col>
+      <ion-col col-3>
+          <a class="" ion-button  color="dark" outline >Prinipal</a>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-list class="dashboard-list">
+    <ion-item (click)="test()">
+      <ion-icon name="list" item-start></ion-icon>
+      <h3>History</h3>
+      <p>Browser through the list of calculations you made</p>
+    </ion-item>
+
+    <ion-item>
+      <!-- <ion-icon name="contact" item-start></ion-icon> -->
+      <ion-icon ios="ios-person" md="md-person" item-start></ion-icon>
+      <h3>My Profile</h3>
+      <p>Look for your served profiles</p>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon ios="ios-heart" md="md-heart" color="fusionred" item-start></ion-icon>
+      <h3>Share to your friend</h3>
+      <p>Invite your friend to help them calculate their emi's using this app</p>
+    </ion-item>
+
+    <!-- <ion-item>
+      <ion-grid>
+        <ion-row>
+          <ion-col col-4 text-center>
+              <ion-icon name="star"></ion-icon> 
+          </ion-col>
+          <ion-col col-4>
+              <ion-icon name="share"></ion-icon>
+          </ion-col>
+          <ion-col col-4>
+              <ion-icon name="star"></ion-icon> 
+          </ion-col>
+        </ion-row>
+      </ion-grid>      
+    </ion-item> -->
+
+  </ion-list>
+
+
+ 
+</ion-content>

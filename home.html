@@ -1,15 +1,13 @@
 <ion-header  no-border>
   <ion-navbar color="myapp-blue">
-    <ion-title></ion-title>
+    <ion-title>EMI Calculator</ion-title>
 
     <ion-buttons end>
         <button ion-button icon-only (click)="openModal()">
             <ion-icon name="settings"></ion-icon>
         </button>
       </ion-buttons>
-
-  </ion-navbar>    
-
+  </ion-navbar>
 </ion-header> 
 
 <ion-content class="myapp">
@@ -17,22 +15,48 @@
     <ion-row>
       <ion-col col-12>
           <h4 class="heading" ion-text color="dark">FINANCIAL TOOL CALCULATOR TOOL</h4>
-          <p class="heading-para">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus bibendum</p>
+          <p class="heading-para">Your personal financial tool to calculate for Home Loan, Personal Loan and Car Loan</p>
       </ion-col>
     </ion-row>
 
-    <ion-row>  
-      <ion-col col-3>
-        <a class="" (click)="openPage('emi')" ion-button color="dark" outline >Calc</a>
+    <ion-row id="dash">  
+      <ion-col col-3 text-center>
+        <a (click)="openPage('emi')"
+          class="tool-links"
+          ion-button  color="dark" outline >
+          <!-- <ion-icon name="cash"></ion-icon>             -->
+          &#x20b9;
+        </a>
+        <p class="tool-text" >EMI</p>
       </ion-col>
-      <ion-col col-3>
-          <a class="" ion-button  color="dark" outline >ROI %</a>
+
+      <ion-col col-3 text-center>
+        <a
+          class="tool-links" 
+          ion-button  color="dark" outline >
+          &#247;
+          <!-- <ion-icon name="pulse"></ion-icon>             -->
+        </a>
+        <p class="tool-text">Rate of Interest</p>
       </ion-col>
-      <ion-col col-3>
-          <a class="" ion-button  color="dark" outline >Tenure</a>
+
+      <ion-col col-3 text-center>
+        <a
+          class="tool-links" 
+          ion-button  color="dark" outline >
+          <ion-icon name="time"></ion-icon>            
+        </a>
+        <p class="tool-text">Tenure</p>
+
       </ion-col>
-      <ion-col col-3>
-          <a class="" ion-button  color="dark" outline >Prinipal</a>
+
+      <ion-col col-3 text-center>
+        <a
+          class="tool-links"
+          ion-button  color="dark" outline >
+          <ion-icon name="cash"></ion-icon>            
+        </a>
+        <p class="tool-text">Principal</p>
       </ion-col>
     </ion-row>
   </ion-grid>

@@ -1,4 +1,4 @@
-import { SaveProfilePage } from './../save-profile/save-profile';
+import { ListProfilePage } from './../list-profile/list-profile';
 // Or to get a key/value pair
 // this.storage.get('sample_json').then((val) => {
 //     console.log(JSON.parse(val));
@@ -19,7 +19,7 @@ import { SaveProfilePage } from './../save-profile/save-profile';
 
 import { HistoryPage } from './../history/history';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { AlertController } from 'ionic-angular';
 
@@ -61,7 +61,8 @@ export class EmiPage {
   constructor(public navCtrl: NavController, 
             public navParams: NavParams, 
             public storage: Storage,
-            public alertCtrl: AlertController        
+            public alertCtrl: AlertController,
+            public modal: ModalController
     ) {
 
     console.log('EMI > constructor');
@@ -91,9 +92,32 @@ export class EmiPage {
     console.log('ionViewDidLoad EmiPage');
   }
   
+  saveProfile() {
+    console.log('EMI > saveProfile');
+
+    const emiData = {
+        principal:  this.principal,
+        interest:   this.interest,
+        tenure:     this.tenure,
+        tenureType: this.selectTenure,
+        id: null
+    };
+
+    const modal   =  this.modal.create('EditProfilePage', {data: emiData });
+    modal.present();
+    modal.onDidDismiss(data => {
+        // Call the method to do whatever in your home.ts
+        console.log('Modal closed');
+        console.log(data);
+        if(data) {
+            //this.navCtrl.push(ListProfilePage);
+            
+            this.navCtrl.setRoot(ListProfilePage, {}, {animate: true, direction: "forward"});
+        }
+    });
+  }
+
   onPrincipalChange() {
-    console.log('EMI > onPrincipalChange');
-    console.log(this.principal);
     if( this.principal) {
         var principalAmountInWords = this.number2text(this.principal);
         this.principalAmountInWords = principalAmountInWords;
@@ -101,7 +125,6 @@ export class EmiPage {
         this.principalAmountInWords = '';
     }
   }
-
 
   calculate(emiForm) {
     console.log('EMI > calculateEMI');
@@ -219,7 +242,7 @@ export class EmiPage {
         this.navCtrl.push(HistoryPage); 
     }
     if(page === 'save') {
-        this.navCtrl.push(SaveProfilePage);
+        //this.navCtrl.push(SaveProfilePage);
     }
   }
 

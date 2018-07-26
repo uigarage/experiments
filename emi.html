@@ -20,9 +20,9 @@ The above 2 combo epd iruku
 </ion-header>
 
 <ion-content class="myapp">
-
   <form 
     id="emiCalculateForm"
+    class="form"
     #emiCalculateForm="ngForm"
     (ngSubmit)="calculate(emiCalculateForm)"
     name="emiCalculateForm">
@@ -32,7 +32,6 @@ The above 2 combo epd iruku
     <ion-list>
       <ion-item>
         <ion-label stacked>Principal</ion-label>
-        
         <ion-input 
           required
           [(ngModel)]="principal"
@@ -87,31 +86,12 @@ The above 2 combo epd iruku
             class="myapp-btn" ion-button icon-left full 
             color="myapp-blue" 
             type="button" 
-            (click)="openPage('save')"
+            (click)="saveProfile()"
             >
             <!-- [disabled]="saveButtonDisable" -->
               Save
             </button>
         </ion-col>
-
-        <!-- <ion-col col-4>
-          <button 
-            class="myapp-btn" ion-button icon-left full 
-            color="myapp-blue" 
-            type="button" 
-            [disabled]="saveButtonDisable">
-              Details
-            </button>
-        </ion-col> -->
-
-          <!-- <ion-col col-4>
-              <button class="myapp-btn" ion-button icon-left full color="myapp-blue"  
-                (click)="openPage('history')"
-                type="button">
-                  <ion-icon name="md-filing"></ion-icon>
-                  History
-                </button>
-            </ion-col> -->
       </ion-row>
       
     </ion-grid>

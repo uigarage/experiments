@@ -13,44 +13,44 @@ From chinese
 The above 2 combo epd iruku
 
 -->
-<ion-header>
-
-  <ion-navbar color="fusionred">
-    <ion-title></ion-title>
+<ion-header class="myapp-header" id="calculateEmiHeader"  no-border>
+  <ion-navbar color="myapp-grey">
+    <ion-title>EMI Calculator</ion-title>
   </ion-navbar>
-
 </ion-header>
 
+<ion-content class="myapp">
 
-<ion-content >
-  <form id="emiCalculateForm"
+  <form 
+    id="emiCalculateForm"
     #emiCalculateForm="ngForm"
-    (ngSubmit)="calculateEMI(emiCalculateForm)">
+    (ngSubmit)="calculate(emiCalculateForm)"
+    name="emiCalculateForm">
+
+    <p id="principalAmountInWords" text-uppercase>{{ principalAmountInWords }}</p>
 
     <ion-list>
       <ion-item>
-        {{principalAmountInWords}}
-      </ion-item>  
-      <ion-item>
         <ion-label stacked>Principal</ion-label>
+        
         <ion-input 
           required
           [(ngModel)]="principal"
           (ngModelChange)="onPrincipalChange()"
           name="principal"
           type="number"></ion-input>
-      </ion-item>
+        </ion-item>
     
-      <ion-item>
-        <ion-label stacked>Interest</ion-label>
-        <ion-input 
-          required 
-          [(ngModel)]="interest"
-          name="interest"
-          type="number"></ion-input>
-      </ion-item>
+        <ion-item>
+          <ion-label stacked>Interest</ion-label>
+          <ion-input 
+            required 
+            [(ngModel)]="interest"
+            name="interest"
+            type="number"></ion-input>
+        </ion-item>
 
-      <ion-item>
+        <ion-item>
           <ion-label stacked>Tenure in {{ monthOrYear }}</ion-label>
           <ion-input 
             required 
@@ -58,48 +58,91 @@ The above 2 combo epd iruku
             name="tenure"
             type="number"></ion-input>
           <ion-toggle 
-            color="fusionred" 
+            color="myapp-blue" 
             [(ngModel)]="selectTenure" 
             (ngModelChange)="onSelectTenure($event)" 
             name="selectTenure"
             checked="true"></ion-toggle>
-      </ion-item>
-      <ion-item>
-      </ion-item>
-      
+        </ion-item>      
   </ion-list>
 
   <ion-grid>
       <ion-row>
         <ion-col col-4>
-          <button ion-button icon-left full color="fusionred">
-            <ion-icon name="md-close"></ion-icon>
+          <button class="myapp-btn" ion-button icon-left full color="myapp-blue">
+            <!-- <ion-icon name="md-close"></ion-icon> -->
             Reset
           </button>
         </ion-col>
 
         <ion-col col-4>
-          <button ion-button icon-left full color="fusionred" (click)="calculateEMI()">
-              <ion-icon name="md-calculator"></ion-icon>
+          <button class="myapp-btn" ion-button icon-left full color="myapp-blue" type="submit">
+              <!-- <ion-icon name="md-calculator"></ion-icon> -->
               Calculate
             </button>
         </ion-col>
 
         <ion-col col-4>
-            <button ion-button icon-left full color="fusionred" type="submit">
-                <ion-icon name="md-calculator"></ion-icon>
-                Calculate
-              </button>
-          </ion-col>
+          <button 
+            class="myapp-btn" ion-button icon-left full 
+            color="myapp-blue" 
+            type="button" 
+            (click)="openPage('save')"
+            >
+            <!-- [disabled]="saveButtonDisable" -->
+              Save
+            </button>
+        </ion-col>
 
-          <ion-col col-4>
-              <button ion-button icon-left full color="fusionred">
+        <!-- <ion-col col-4>
+          <button 
+            class="myapp-btn" ion-button icon-left full 
+            color="myapp-blue" 
+            type="button" 
+            [disabled]="saveButtonDisable">
+              Details
+            </button>
+        </ion-col> -->
+
+          <!-- <ion-col col-4>
+              <button class="myapp-btn" ion-button icon-left full color="myapp-blue"  
+                (click)="openPage('history')"
+                type="button">
                   <ion-icon name="md-filing"></ion-icon>
                   History
                 </button>
-            </ion-col>
+            </ion-col> -->
       </ion-row>
       
     </ion-grid>
     </form>
+
+  <ion-card 
+    *ngIf="emiValue"
+    id="emiDetailCard">
+    <ion-card-content>
+      <div>
+          <span id="emiResultLabel">&#x20b9; 80008.12</span> is your montly emi
+      </div>
+
+      <ion-grid>
+        <ion-row>
+          <ion-col col-1 text-center>	&#8226;</ion-col>
+          <ion-col col-11 text-uppercase
+          class="result-label">
+            Interest Payable
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col col-1 text-center>	&#8226;</ion-col>
+          <ion-col col-11></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col col-1 text-center>	&#8226;</ion-col>
+          <ion-col col-11 text-uppercase
+          class="result-label">this is the amount you end up paying in total</ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

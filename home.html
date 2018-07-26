@@ -62,6 +62,11 @@
   </ion-grid>
 
   <ion-list class="dashboard-list">
+    <ion-item (click)="loanCompare()">
+      <ion-icon ios="ios-git-compare" md="md-git-compare" item-start></ion-icon>
+      <h3>Loan Compare</h3>
+      <p>Compare two loan values to make out a difference</p>
+    </ion-item>
     <ion-item (click)="test()">
       <ion-icon name="list" item-start></ion-icon>
       <h3>History</h3>

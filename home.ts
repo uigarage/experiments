@@ -23,9 +23,6 @@ export class HomePage {
     
   }
 
-  test() {
-    console.log('Test');
-  }
   signIn() {
     // console.log(this.username.value + ', ' + this.password.value);
 

@@ -15,8 +15,11 @@
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
 
+$myapp-blue: #4262f1;
+$myapp-blue-dark: #3B5ACF;
 $myapp-grey:   #fafafa;
 $myapp-button-size: 1.2rem;
+$myapp-grey-text: #1C2833;
 
 body {
     background: $myapp-grey;
@@ -61,6 +64,25 @@ h4 {
     font-size: 1.2rem;
 }
 
+#dash {
+    background: $myapp-blue;
+    padding-top: 12px;
+}
+
+#dash .tool-links {
+    border-radius: 25px;
+    border:5px solid $myapp-blue-dark;  
+    background: #fff;   
+    height: 55px; 
+    width: 60px;
+    font-size: 2.6rem;
+    color: $myapp-blue-dark;
+}
+
+#dash .tool-text {
+    color: #fff;
+} 
+
 // Butons
 .myapp-btn {
     border-radius: 25px;
@@ -71,4 +93,29 @@ h4 {
 .item-md, 
 .item-ios {
     background: $myapp-grey;
+}
+
+#emiCalculateForm .no-border .item-inner {
+    border: 0 !important;
+}
+
+#emiCalculateForm  .text-input {
+    font-size: 2.6rem;
+}
+
+#emiCalculateForm  #principalAmountInWords {
+    height: 34px;
+    padding: 4px 8px;
+    margin: auto 8px;
+}
+
+#emiResultLabel {
+    font-size: 2rem;
+    border-radius: 25px;
+    height: 40px;
+    display: inline-block
+}
+#emiDetailCard .result-label {
+    font-size: 1.2rem;
+    color: $myapp-grey-text;
 }

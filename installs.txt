@@ -1,0 +1,11 @@
+D:\angular\ionicpractise>ionic generate page EditProfile
+
+? The Ionic CLI has an update available (3.20.0 => 4.0.1)! Would you like to install it? No
+Not automatically updating your CLI.
+[OK] Generated a page named EditProfile!
+
+D:\angular\ionicpractise>ionic generate page ListProfile
+[OK] Generated a page named ListProfile!
+
+D:\angular\ionicpractise>ionic generate page LoanCompare
+[OK] Generated a page named LoanCompare!

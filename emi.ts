@@ -1,3 +1,22 @@
+import { SaveProfilePage } from './../save-profile/save-profile';
+// Or to get a key/value pair
+// this.storage.get('sample_json').then((val) => {
+//     console.log(JSON.parse(val));
+// });
+
+// E = P×r×(1 + r)n/((1 + r)n - 1)
+// E is EMI
+// where P is Priniple Loan Amount (400000)
+// r is rate of interest calualted in monthly basis it should be = Rate of Annual interest/12/100
+// if its 10% annual ,then its 10/12/100=0.00833
+// n is tenture in number of months
+// Eg: For 100000 at 10% annual interest for a period of 12 months
+// it comes  to 100000*0.00833*(1 + 0.00833)12/((1 + 0.00833)12 - 1) = 8792
+
+//  Monthly EMI: 12673.40
+//  Total Interest: 56242.53
+//  Total Payment: 456242.53
+
 import { HistoryPage } from './../history/history';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
@@ -34,20 +53,23 @@ export class EmiPage {
   interest: number;
   tenure: number;
   emiObj: EmiDO;
+  saveButtonDisable: Boolean = false;
   storedEmiList: any;   //Array<object>;
+  emiValue: number = 0;
   
 
   constructor(public navCtrl: NavController, 
             public navParams: NavParams, 
             public storage: Storage,
-            public alertCtrl: AlertController
-        ) {
+            public alertCtrl: AlertController        
+    ) {
+
     console.log('EMI > constructor');
-    console.log(navParams);
-    console.log( navParams.get('principal'));
+
     this.monthOrYear = 'Year(s)';
     this.selectTenure = true;
-
+    this.saveButtonDisable = true;
+    this.emiValue = 1;
     if(navParams.get('principal')) {
         console.log('calculate EMI');
         this.principal = navParams.get('principal');
@@ -55,41 +77,6 @@ export class EmiPage {
         this.tenure = navParams.get('tenure');
         this.onPrincipalChange()
     }
-
-    
-
-    // set a key/value
-    // this.storage.set('sample_json', JSON.stringify( { prop: 'value1', prop2: 'value2'} ));
-    // this.storage.set('sample_json', JSON.stringify( [ { prop: 'value1', prop2: 'value2'}, { prop: 'value1', prop2: 'value2'} , { prop: 'value1', prop2: 'value2'}   ] ));
-    // this.storage.get('sample_json').then((val) => {
-    //     console.log(JSON.parse(val));
-    // });
-
-
-    // var emiObj = {
-    //     tenureType: 'Month(s)',
-    //     principal: 400000,
-    //     interest: 8.75,
-    //     tenure: 36
-    // }
-
-    // var emiToStore = [];
-
-    // for(var i = 0; i < 5; i ++) {
-    //     emiToStore.push( {
-    //         tenureType: 'Month(s)',
-    //         principal: 400000 + i,
-    //         interest: 8.75 + i ,
-    //         tenure: 36 + i
-    //     });
-    // }
-
-    // this.storage.set(EMIHISTORY, JSON.stringify(emiToStore));
-
-    // this.storedEmiList = this.storage.get(EMIHISTORY)
-    // .then((val) => {
-    //     return JSON.parse(val);
-    // });
   }
 
   onSelectTenure($event) {
@@ -107,15 +94,20 @@ export class EmiPage {
   onPrincipalChange() {
     console.log('EMI > onPrincipalChange');
     console.log(this.principal);
-    var principalAmountInWords = this.number2text(this.principal);
-    this.principalAmountInWords = principalAmountInWords;
+    if( this.principal) {
+        var principalAmountInWords = this.number2text(this.principal);
+        this.principalAmountInWords = principalAmountInWords;
+    } else {
+        this.principalAmountInWords = '';
+    }
   }
 
 
-  calculateEMI(emiForm) {
+  calculate(emiForm) {
     console.log('EMI > calculateEMI');
     var errorMessage = [];
-
+    console.log(emiForm);
+    
     // Doing some basic form validation
     if( !emiForm.form.valid ) {
         if( !emiForm.form.controls.principal.valid ) {
@@ -153,23 +145,9 @@ export class EmiPage {
         return;
     }
 
-    // Or to get a key/value pair
-    // this.storage.get('sample_json').then((val) => {
-    //     console.log(JSON.parse(val));
-    // });
+    //  If all goes well, enable the Details button
+    this.saveButtonDisable = false;
 
-    // E = P×r×(1 + r)n/((1 + r)n - 1)
-    // E is EMI
-    // where P is Priniple Loan Amount (400000)
-    // r is rate of interest calualted in monthly basis it should be = Rate of Annual interest/12/100
-    // if its 10% annual ,then its 10/12/100=0.00833
-    // n is tenture in number of months
-    // Eg: For 100000 at 10% annual interest for a period of 12 months
-    // it comes  to 100000*0.00833*(1 + 0.00833)12/((1 + 0.00833)12 - 1) = 8792
-
-    //  Monthly EMI: 12673.40
-    //  Total Interest: 56242.53
-    //  Total Payment: 456242.53
     this.emiObj = {
         tenureType: this.monthOrYear,
         principal: this.principal,
@@ -191,6 +169,11 @@ export class EmiPage {
 
     emi = p * r * Math.pow((1 + r),n)/( Math.pow((1 + r),n) - 1);
     console.log(emi);
+    this.emiValue = emi;
+    //  800 ROI=8 TEnure=8 yrs
+    //  Interest Payable= 286
+    //  Total Payment = 1086
+    //  EMI 11 
     
     this.storeEMIValues(this.emiObj);
   }
@@ -232,8 +215,12 @@ export class EmiPage {
   openPage(page: string) {
     console.log('EMI > openPage > ', page);
 
-    if(page === 'history') 
-      this.navCtrl.push(HistoryPage); 
+    if(page === 'history') {
+        this.navCtrl.push(HistoryPage); 
+    }
+    if(page === 'save') {
+        this.navCtrl.push(SaveProfilePage);
+    }
   }
 
   //    Common utils function

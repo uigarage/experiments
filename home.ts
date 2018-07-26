@@ -1,3 +1,4 @@
+import { LoanComparePage } from './../loan-compare/loan-compare';
 import { EmiPage } from './../emi/emi';
 import { Component, ViewChild } from '@angular/core';
 import { NavController, AlertController } from 'ionic-angular';
@@ -20,7 +21,10 @@ export class HomePage {
 
     if(page === 'emi') 
       this.navCtrl.push(EmiPage)
-    
+  }
+
+  loanCompare() {
+    this.navCtrl.push(LoanComparePage);
   }
 
   signIn() {

@@ -14,115 +14,139 @@ The above 2 combo epd iruku
 
 -->
 <ion-header class="myapp-header" id="calculateEmiHeader"  no-border>
-  <ion-navbar color="myapp-grey">
-    <ion-title>EMI Calculator</ion-title>
-  </ion-navbar>
-</ion-header>
-
-<ion-content class="myapp">
-  <form 
-    id="emiCalculateForm"
-    class="form"
-    #emiCalculateForm="ngForm"
-    (ngSubmit)="calculate(emiCalculateForm)"
-    name="emiCalculateForm">
-
-    <p id="principalAmountInWords" text-uppercase>{{ principalAmountInWords }}</p>
-
-    <ion-list>
-      <ion-item>
-        <ion-label stacked>Principal</ion-label>
-        <ion-input 
-          required
-          [(ngModel)]="principal"
-          (ngModelChange)="onPrincipalChange()"
-          name="principal"
-          type="number"></ion-input>
-        </ion-item>
-    
-        <ion-item>
-          <ion-label stacked>Interest</ion-label>
+    <ion-navbar color="myapp-grey">
+      <ion-title>EMI Calculator</ion-title>
+    </ion-navbar>
+  </ion-header>
+  
+  <ion-content class="myapp">
+    <form 
+      id="emiCalculateForm"
+      class="form"
+      #emiCalculateForm="ngForm"
+      (ngSubmit)="calculate(emiCalculateForm)"
+      name="emiCalculateForm">
+  
+      <p id="principalAmountInWords" text-uppercase>{{ principalAmountInWords }}</p>
+  
+      <ion-list>
+        <ion-item class="no-top-border">
+          <ion-label stacked>Principal</ion-label>
           <ion-input 
-            required 
-            [(ngModel)]="interest"
-            name="interest"
-            type="number"></ion-input>
-        </ion-item>
-
-        <ion-item>
-          <ion-label stacked>Tenure in {{ monthOrYear }}</ion-label>
-          <ion-input 
-            required 
-            [(ngModel)]="tenure"
-            name="tenure"
-            type="number"></ion-input>
-          <ion-toggle 
-            color="myapp-blue" 
-            [(ngModel)]="selectTenure" 
-            (ngModelChange)="onSelectTenure($event)" 
-            name="selectTenure"
-            checked="true"></ion-toggle>
-        </ion-item>      
-  </ion-list>
-
-  <ion-grid>
-      <ion-row>
-        <ion-col col-4>
-          <button class="myapp-btn" ion-button icon-left full color="myapp-blue">
-            <!-- <ion-icon name="md-close"></ion-icon> -->
-            Reset
-          </button>
-        </ion-col>
-
-        <ion-col col-4>
-          <button class="myapp-btn" ion-button icon-left full color="myapp-blue" type="submit">
-              <!-- <ion-icon name="md-calculator"></ion-icon> -->
-              Calculate
-            </button>
-        </ion-col>
-
-        <ion-col col-4>
-          <button 
-            class="myapp-btn" ion-button icon-left full 
-            color="myapp-blue" 
-            type="button" 
-            (click)="saveProfile()"
-            >
-            <!-- [disabled]="saveButtonDisable" -->
-              Save
-            </button>
-        </ion-col>
-      </ion-row>
+            required
+            clearInput=true min="0" max="5"
+            [(ngModel)]="principal"
+            (ngModelChange)="onPrincipalChange()"
+            (keyup)="onKeyUp($event)"
+            name="principal"
+            type="number"
+            ></ion-input>
+          </ion-item>
       
-    </ion-grid>
-    </form>
-
-  <ion-card 
-    *ngIf="emiValue"
-    id="emiDetailCard">
-    <ion-card-content>
-      <div>
-          <span id="emiResultLabel">&#x20b9; 80008.12</span> is your montly emi
-      </div>
-
-      <ion-grid>
+          <ion-item>
+            <ion-label stacked>Interest</ion-label>
+            <ion-input 
+              required 
+              [(ngModel)]="interest"
+              name="interest"
+              type="number"></ion-input>
+          </ion-item>
+  
+          <ion-item>
+            <ion-label stacked>Tenure in {{ monthOrYear }}</ion-label>
+            <ion-input 
+              required 
+              [(ngModel)]="tenure"
+              name="tenure"
+              type="number"></ion-input>
+            <ion-toggle 
+              color="myapp-blue" 
+              [(ngModel)]="selectTenure" 
+              (ngModelChange)="onSelectTenure($event)" 
+              name="selectTenure"
+              checked="true"></ion-toggle>
+          </ion-item>      
+    </ion-list>
+  
+    <ion-grid>
         <ion-row>
-          <ion-col col-1 text-center>	&#8226;</ion-col>
-          <ion-col col-11 text-uppercase
-          class="result-label">
-            Interest Payable
+          <ion-col col-4>
+            <button class="myapp-btn" ion-button icon-left full color="myapp-blue">
+              Reset
+            </button>
+          </ion-col>
+  
+          <ion-col col-4>
+            <button class="myapp-btn" ion-button icon-left full color="myapp-blue" type="submit">
+                Calculate
+              </button>
+          </ion-col>
+  
+          <ion-col col-4>
+            <button 
+              class="myapp-btn" ion-button icon-left full 
+              color="myapp-blue" 
+              type="button" 
+              (click)="saveProfile()"
+              >
+              <!-- [disabled]="saveButtonDisable" -->
+                Save
+              </button>
           </ion-col>
         </ion-row>
-        <ion-row>
-          <ion-col col-1 text-center>	&#8226;</ion-col>
-          <ion-col col-11></ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col col-1 text-center>	&#8226;</ion-col>
-          <ion-col col-11 text-uppercase
-          class="result-label">this is the amount you end up paying in total</ion-col>
-        </ion-row>
+        
       </ion-grid>
-    </ion-card-content>
-  </ion-card>
-</ion-content>
+      </form>
+  
+    <ion-card 
+      *ngIf="EmiResultSet"
+      id="emiDetailCard">
+      <ion-card-content>
+        <div text-center>
+          Your EMI is
+            <ion-badge class="badge-result-emi" color="myapp-orange" item-end>
+              &#8377; {{ EmiResultSet.emi.toLocaleString("en-IN", {maximumFractionDigits: 2})   }}
+            </ion-badge> for {{ EmiResultSet.tenureInWords }}
+        </div>
+
+       
+        <ion-grid>
+          <ion-row>
+              <ion-col col-6>
+                Principal Amount:
+              </ion-col>
+              <ion-col col-6 text-right class="">
+                  <ion-badge class="result-label-number" color="myapp-grey">
+                    &#8377; {{ EmiResultSet.principal.toLocaleString("en-IN", {maximumFractionDigits: 2})  }}
+                  </ion-badge>
+              </ion-col>
+          </ion-row>
+
+          <ion-row>
+              <ion-col col-6>
+                Interest Payable:
+              </ion-col>
+              <ion-col col-6 text-right class="">
+                  + 
+                  <ion-badge class="result-label-number" color="myapp-grey">
+                    &#8377; {{ EmiResultSet.interestPayable.toLocaleString("en-IN", {maximumFractionDigits: 2}) }}
+                  </ion-badge>
+              </ion-col>
+          </ion-row>
+
+          <ion-row>
+              <ion-col col-6>
+                Total Amount to be Paid:
+              </ion-col>
+              <ion-col col-6 text-right class="">
+                =  
+                <ion-badge class="result-label-number" color="myapp-grey">
+                  &#8377; {{ EmiResultSet.totalPayment.toLocaleString("en-IN", {maximumFractionDigits: 2})  }}
+                </ion-badge>
+              </ion-col>
+          </ion-row>
+        </ion-grid>
+
+      </ion-card-content>
+    </ion-card>
+  </ion-content>

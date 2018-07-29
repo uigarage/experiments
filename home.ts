@@ -1,3 +1,4 @@
+import { HistoryPage } from './../history/history';
 import { LoanComparePage } from './../loan-compare/loan-compare';
 import { EmiPage } from './../emi/emi';
 import { Component, ViewChild } from '@angular/core';
@@ -25,6 +26,10 @@ export class HomePage {
 
   loanCompare() {
     this.navCtrl.push(LoanComparePage);
+  }
+
+  history() {
+    this.navCtrl.push(HistoryPage);
   }
 
   signIn() {

@@ -1,42 +1,10 @@
 import { ListProfilePage } from './../list-profile/list-profile';
-// Or to get a key/value pair
-// this.storage.get('sample_json').then((val) => {
-//     console.log(JSON.parse(val));
-// });
-
-// E = P×r×(1 + r)n/((1 + r)n - 1)
-// E is EMI
-// where P is Priniple Loan Amount (400000)
-// r is rate of interest calualted in monthly basis it should be = Rate of Annual interest/12/100
-// if its 10% annual ,then its 10/12/100=0.00833
-// n is tenture in number of months
-// Eg: For 100000 at 10% annual interest for a period of 12 months
-// it comes  to 100000*0.00833*(1 + 0.00833)12/((1 + 0.00833)12 - 1) = 8792
-
-//  Monthly EMI: 12673.40
-//  Total Interest: 56242.53
-//  Total Payment: 456242.53
-
 import { HistoryPage } from './../history/history';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { AlertController } from 'ionic-angular';
-
-/**
- * Generated class for the EmiPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-interface EmiDO {
-    tenureType: string,
-    principal: number,
-    interest: number,
-    tenure: number
-}
-
-const EMIHISTORY = 'emihistory';
+import { EMIHISTORY, EmiDO, calculateForEMI, EMI_SEARCH_TYPE, TENURE_TYPE, TENURE_TYPE_LABEL } from '../../app/common';
 
 @IonicPage()
 @Component({
@@ -54,42 +22,77 @@ export class EmiPage {
   tenure: number;
   emiObj: EmiDO;
   saveButtonDisable: Boolean = false;
-  storedEmiList: any;   //Array<object>;
-  emiValue: number = 0;
-  
+  storedEmiList: any;
 
-  constructor(public navCtrl: NavController, 
-            public navParams: NavParams, 
-            public storage: Storage,
-            public alertCtrl: AlertController,
-            public modal: ModalController
+  EmiResultSet: EmiDO;
+
+  constructor(
+        public navCtrl: NavController, 
+        public navParams: NavParams, 
+        public storage: Storage,
+        public alertCtrl: AlertController,
+        public modal: ModalController
     ) {
 
     console.log('EMI > constructor');
 
-    this.monthOrYear = 'Year(s)';
+    this.monthOrYear = TENURE_TYPE_LABEL.year;
     this.selectTenure = true;
     this.saveButtonDisable = true;
-    this.emiValue = 1;
-    if(navParams.get('principal')) {
-        console.log('calculate EMI');
-        this.principal = navParams.get('principal');
-        this.interest = navParams.get('interest');
-        this.tenure = navParams.get('tenure');
-        this.onPrincipalChange()
+
+    if(this.navParams.get('principal')) {
+        console.log('calculate EMI with params');
+        console.log(this.EmiResultSet);
+
+        this.principal = this.navParams.get('principal');
+        this.interest = this.navParams.get('interest');
+        this.tenure = this.navParams.get('tenure');
+        let tenureType = this.navParams.get('tenureType');
+
+        this.onPrincipalChange();
+
+        this.monthOrYear = (tenureType === TENURE_TYPE.year) ? TENURE_TYPE_LABEL.year : TENURE_TYPE_LABEL.month; 
+
+        this.EmiResultSet = calculateForEMI({
+            principal: this.principal,
+            interest: this.interest,
+            tenure: this.tenure,
+            tenureType: tenureType,
+            searchType: EMI_SEARCH_TYPE.normal
+        });
+        
+        console.log(this.EmiResultSet);
     }
+
+    this.storage.get(EMIHISTORY).then((val) => {
+        console.log(val);
+        if(!val) {
+            this.storage.set(EMIHISTORY, []);
+        }
+    });
   }
 
   onSelectTenure($event) {
     console.log('EMI > onSelectTenure');
-    this.monthOrYear = 'Month(s)';
+    this.monthOrYear = TENURE_TYPE_LABEL.month;
 
     if(this.selectTenure)
-      this.monthOrYear  = 'Year(s)';
+      this.monthOrYear  = TENURE_TYPE_LABEL.month;
+  }
+
+  public onKeyUp(event: any) {
+    const MY_REGEXP =  /^\s*(\-|\+)?(\d+|(\d*(\.\d*)))([eE][+-]?\d+)?\s*$/;;
+
+    let newValue = event.target.value;
+    let regExp = new RegExp(MY_REGEXP);
+
+    console.log(newValue.toLocaleString("en-IN"));
+    // if (!regExp.test(newValue)) {
+    //   event.target.value = newValue.slice(0, -1);
+    // }
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad EmiPage');
   }
   
   saveProfile() {
@@ -99,7 +102,7 @@ export class EmiPage {
         principal:  this.principal,
         interest:   this.interest,
         tenure:     this.tenure,
-        tenureType: this.selectTenure,
+        tenureType: (this.selectTenure === TENURE_TYPE_LABEL.year) ? TENURE_TYPE.year: TENURE_TYPE.month,
         id: null
     };
 
@@ -171,48 +174,35 @@ export class EmiPage {
     //  If all goes well, enable the Details button
     this.saveButtonDisable = false;
 
-    this.emiObj = {
-        tenureType: this.monthOrYear,
-        principal: this.principal,
-        interest: this.interest,
-        tenure: this.tenure
-    }
-
     console.log(this.emiObj);
 
-    var emi, 
-    // p =  400000, //this.principal,
-    // r =  8.75/12/100, // this.interest,
-    // n = 36; //this.tenure;  //  in months, if it's in years, then convert it to months.
+    let emi;
+    emi = calculateForEMI({
+        principal: this.principal,
+        interest: this.interest,
+        tenure: this.tenure,
+        tenureType: (this.monthOrYear === 'Year(s)') ?  TENURE_TYPE.year : TENURE_TYPE.month,
+        searchType: EMI_SEARCH_TYPE.normal
+    }); 
 
-    p =  this.principal,
-    r =  this.interest /12/100,
-    n =  (this.monthOrYear == 'Year(s)') ? (this.tenure * 12) : this.tenure ;  
-    //  in months, if it's in years, then convert it to months.
-
-    emi = p * r * Math.pow((1 + r),n)/( Math.pow((1 + r),n) - 1);
     console.log(emi);
-    this.emiValue = emi;
-    //  800 ROI=8 TEnure=8 yrs
-    //  Interest Payable= 286
-    //  Total Payment = 1086
-    //  EMI 11 
-    
-    this.storeEMIValues(this.emiObj);
+    this.EmiResultSet = emi;
+    this.storeEMIValues(emi);
   }
 
-  storeEMIValues(emi: Object) {
+  storeEMIValues(emi: EmiDO) {
     console.log('EMI > storeEMIValues');
     var storedEmiList = [];
-    this.storage.get(EMIHISTORY).then((val) => {
-        if(val) {
+    this.storage.get(EMIHISTORY).then((data) => {
+        if(data) {
             console.log('Inside GET Storage');
-            storedEmiList = JSON.parse(val);
+            console.log(data);
+            storedEmiList = data;
 
             console.log(this.isEMIValuesAlreadyExist(storedEmiList, emi));
             if(!this.isEMIValuesAlreadyExist(storedEmiList, emi)) {
                 storedEmiList.push(emi);
-                this.storage.set(EMIHISTORY, JSON.stringify( storedEmiList  ));
+                this.storage.set(EMIHISTORY, storedEmiList);
             }
 
             console.log('Stored EMI List');
@@ -225,14 +215,21 @@ export class EmiPage {
     var temp;
     for( var i = 0, len = storedList.length; i < len; i++ ) {
         temp = storedList[i];
-        if(temp.principal === emi.principal 
-            && temp.interest === emi.interest
-            && temp.tenure === emi.tenure
-            && temp.tenureType === emi.tenureType ) {
-                return true;
-        }
+        if(temp.searchType === EMI_SEARCH_TYPE.normal) {
+            if(temp.principal === emi.principal 
+                && temp.interest === emi.interest
+                && temp.tenure === emi.tenure
+                && temp.tenureType === emi.tenureType ) {
+                    return true;
+            }
+        }        
     }
     return false;
+  }
+
+  totalAmountToPay(data) {
+    console.log('Total Amount To Pay');
+   console.log(data); 
   }
 
   openPage(page: string) {

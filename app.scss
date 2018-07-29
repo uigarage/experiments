@@ -95,27 +95,41 @@ h4 {
     background: $myapp-grey;
 }
 
-#emiCalculateForm .no-border .item-inner {
+.form .no-border .item-inner {
     border: 0 !important;
 }
 
-#emiCalculateForm  .text-input {
+.form  .text-input {
     font-size: 2.6rem;
 }
 
-#emiCalculateForm  #principalAmountInWords {
+.form  #principalAmountInWords {
     height: 34px;
     padding: 4px 8px;
     margin: auto 8px;
 }
 
-#emiResultLabel {
-    font-size: 2rem;
-    border-radius: 25px;
-    height: 40px;
-    display: inline-block
+.no-top-border {
+    border-top: 0 !important;
 }
+
 #emiDetailCard .result-label {
     font-size: 1.2rem;
     color: $myapp-grey-text;
+}
+
+.badge-result-emi {
+    font-size: 3rem;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+.result-label-number {
+    font-size: 2rem;
+}
+
+// History Page
+.badge-history-principal {
+    font-size: 2rem;
+    padding: 2px 8px;
 }

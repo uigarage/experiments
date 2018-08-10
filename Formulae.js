@@ -1,6 +1,7 @@
-    console.log('Calculating Principal');
+console.log('Calculating Principal');
     let principal = 0,
         roi = 0,
+        tenure = 0,
         emi = 9749,
         r = 30/12/100,
         n = 12; //  calculated in months
@@ -15,17 +16,13 @@
     roi = ( emi / principal ) * ( (Math.pow( (1+r), n) -1) / (Math.pow( (1+r), n) )  );
     console.log("ROI = ", Math.round(roi * 12 * 100));
 
+    console.log('Calculating Tenure');
+    emi = 415;
+    principal = 10000;
+    r = 10/12/100;
+    //n  is 2 years
 
-// R = 30/12/100
-// 0.025
-// x = 1 + R
-// 1.025
-// emi = 9749;
-// 9749
-// P = 100000;
-// 100000
-// y = emi / (emi - (P*R))
-// 1.3448751551938198
-// Math.log(y) / Math.log(x)
-// 11.999588388793368
-// Math.round(Math.log(y) / Math.log(x));
+    let x = 1+r;
+    let y = emi /  (emi - (principal * r ));
+
+    console.log("Tenure: ", Math.round(Math.log(y) / Math.log(x)));

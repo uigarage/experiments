@@ -1,0 +1,59 @@
+.outer {
+    display: table;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+  }
+  
+  .middle {
+    display: table-cell;
+    vertical-align: middle;
+  }
+  
+  .inner {
+    margin-left: auto;
+    margin-right: auto;
+    width: 400px;
+    /*whatever width you want*/
+  }
+  
+
+/*  Buttons and Icons   */
+
+.check-mark {
+    color: #9c88ff;
+}
+
+.btn-main {
+    color: #fff;
+    background-color: #9c88ff;
+    border-color: #9c88ff
+}
+
+.btn-main:hover {
+    color: #fff;
+    background: #8c7ae6;
+}
+
+.select-box p {
+    margin-top: 15px;
+    margin-bottom: 0;
+    font-weight: bold;
+}
+
+.select-box i.main-icon {
+    color: #44bd32;
+}
+
+.select-box i.check-mark {
+    color: #9c88ff;
+}
+.select-box span {
+    font-size: 0.8rem;
+}
+
+.select-box {
+    border: 1px solid #eee;
+    padding: 10px 20px;
+    border-radius: 8px;
+}

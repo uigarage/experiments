@@ -1,0 +1,30 @@
+How to setup and Install NodeJS and NPM behind a Corporate Firewall
+
+Greetings Earthlings… welcome back to codewithsrini.
+
+It is often difficult to install anything that is related to NodeJS and NPM when we are behind a corporate web proxy. Especially when you are dealing with angular and angular cli, you never know why your NG new command stopped working.
+
+So, assuming that when you are behind a corporate proxy and trying to install something in Angular and your NPM does some background work here. NPM internally doesn’t have access to an outside world. So your installation stops abruptly.
+
+To fix this, let’s go step by step;
+
+To install NodeJS, it is always better to ask your software installation team, they will be happy to oblige to install it in your local working PC.
+
+To setup NPM;
+We need to configure NPM to use proxy with login credentials of your organization; If proxy requires you to authenticate.
+
+Fire up command terminal and execute the below commands.
+ 
+npm config set proxy http://<your org login id>:<password>@proxy.yourorganization.com:8080
+ 
+npm config set https-proxy http://<your org login id>:<password>@proxy.yourorganization.com:8080
+
+npm config set strict-ssl false
+
+npm config set registry http://registry.npmjs.org/
+
+
+The port number should be modified to the one matches you organization’s proxy.
+
+And you are all set.
+
